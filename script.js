@@ -16,15 +16,15 @@
   const sections = ['home', 'work', 'proofs', 'contact'].map(id => document.getElementById(id));
   const layers = ['opening', 'hero', 'work', 'proof', 'gallery', 'contact'];
   const photos = [
-    { key: 'work-josh-wide', title: 'JOSH TALKS', sub: 'AT THE STUDIO', alt: 'Vishal with a colleague during a genuine Josh Talks studio session' },
-    { key: 'work-josh-close', title: 'JOSH TALKS', sub: 'A SHARED MOMENT', alt: 'Vishal and a colleague at the Josh Talks studio, close view' },
+    { key: 'work-josh-wide', title: 'IN SESSION', sub: 'STRATEGY AT WORK', alt: 'Vishal in a working session with a creator' },
+    { key: 'work-josh-close', title: 'A SHARED MOMENT', sub: 'BEHIND THE SCENES', alt: 'Vishal and a creator, close view during a session' },
     { key: 'work-meeting', title: 'WITH CREATORS', sub: 'BEYOND THE SCREEN', alt: 'Vishal with a creator in a professional office environment' }
   ];
   const channels = [
-    { key: 'channel-acharya', lines: ['ACHARYA', 'PRASHANT'] },
-    { key: 'channel-josh', lines: ['JOSH TALKS', 'HINDI'] },
-    { key: 'channel-zee', lines: ['ZEE', 'SWITCH'] },
-    { key: 'channel-unknown', lines: ['UNKNOWN', 'FACTS HINDI'] }
+    { key: 'channel-acharya', lines: ['ACHARYA', 'PRASHANT'], color: '#e0a92e' },
+    { key: 'channel-josh', lines: ['JOSH TALKS', 'HINDI'], color: '#2aa4dd' },
+    { key: 'channel-zee', lines: ['ZEE', 'SWITCH'], color: '#8a4bd6' },
+    { key: 'channel-unknown', lines: ['UNKNOWN', 'FACTS HINDI'], color: '#e0342b' }
   ];
   let lenis, renderer, scene, camera, material, objects, viewHeight = 8, viewWidth = 12;
   let frameId = 0, lastTime = 0, elapsed = 0, hidden = false, bounds = [], displayedPhoto = -1;
@@ -287,12 +287,13 @@
     const tex = await loadTexture(channel.key);
     const front = textureFromCanvas(512, 640, (ctx, w, h) => {
       ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
-      ctx.save(); ctx.beginPath(); ctx.arc(w / 2, 240, 164, 0, Math.PI * 2); ctx.clip();
-      ctx.filter = 'grayscale(1)'; ctx.drawImage(tex.image, 92, 76, 328, 328); ctx.restore();
+      ctx.beginPath(); ctx.arc(w / 2, 240, 176, 0, Math.PI * 2); ctx.fillStyle = channel.color; ctx.fill();
+      ctx.save(); ctx.beginPath(); ctx.arc(w / 2, 240, 162, 0, Math.PI * 2); ctx.clip();
+      ctx.drawImage(tex.image, 92, 78, 328, 328); ctx.restore();
       ctx.fillStyle = '#191919'; ctx.textAlign = 'center'; ctx.font = '800 38px Manrope';
       channel.lines.forEach((line, i) => ctx.fillText(line, w / 2, 478 + i * 48));
-      ctx.fillStyle = '#ff0000'; ctx.fillRect(215, 576, 82, 5);
-      ctx.font = '600 15px Manrope'; ctx.textAlign = 'left'; ctx.fillText('0' + (index + 1), 28, 35);
+      ctx.fillStyle = channel.color; ctx.fillRect(w / 2 - 41, 576, 82, 5);
+      ctx.fillStyle = channel.color; ctx.font = '700 16px Manrope'; ctx.textAlign = 'left'; ctx.fillText('0' + (index + 1), 28, 36);
     });
     const group = new THREE.Group();
     const body = new THREE.Mesh(roundedGeometry(1.64, 2.05, .13, .16), material.silver); body.castShadow = true;
@@ -304,10 +305,34 @@
   async function makeCredential() {
     const texture = await loadTexture('id-card');
     const group = new THREE.Group();
-    const body = new THREE.Mesh(roundedGeometry(4.35, 2.9, .075, .13), material.silver); body.castShadow = true;
-    const face = new THREE.Mesh(new THREE.PlaneGeometry(4.28, 2.84), new THREE.MeshBasicMaterial({ map: texture, toneMapped: false })); face.position.z = .079;
-    const cover = new THREE.Mesh(new THREE.PlaneGeometry(4.33, 2.88), new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: .1, roughness: .2, transparent: true, opacity: .025, clearcoat: 1, depthWrite: false })); cover.position.z = .09;
-    group.add(body, face, cover); return group;
+    // premium red backing rim (the border of the credential)
+    const rim = new THREE.Mesh(roundedGeometry(4.74, 3.34, .13, .26), material.red);
+    rim.castShadow = true; rim.receiveShadow = true; rim.position.z = -.07;
+    // thick white card body with soft bevels
+    const body = new THREE.Mesh(roundedGeometry(4.54, 3.14, .22, .22), material.cardWhite);
+    body.castShadow = true; body.receiveShadow = true; body.position.z = 0;
+    // red PRESS header strip with a small white play mark
+    const headTex = textureFromCanvas(1024, 190, (ctx, w, h) => {
+      ctx.fillStyle = '#e60000'; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#fff'; ctx.textAlign = 'left';
+      ctx.font = '800 68px Manrope'; ctx.fillText('PRESS CREDENTIAL', 42, 120);
+      ctx.beginPath(); ctx.arc(w - 96, h / 2, 50, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.fillStyle = '#e60000'; ctx.beginPath(); ctx.moveTo(w - 112, h / 2 - 24); ctx.lineTo(w - 112, h / 2 + 24); ctx.lineTo(w - 70, h / 2); ctx.closePath(); ctx.fill();
+    });
+    const header = new THREE.Mesh(new THREE.PlaneGeometry(4.18, .58), new THREE.MeshBasicMaterial({ map: headTex, toneMapped: false }));
+    header.position.set(0, 1.11, .3);
+    // the real credential photo — preserves every original detail
+    const faceW = 4.06, faceH = faceW / 1.506;
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(faceW, faceH), new THREE.MeshBasicMaterial({ map: texture, toneMapped: false }));
+    face.position.set(0, -.37, .3);
+    // glossy clear laminate for cinematic reflections
+    const cover = new THREE.Mesh(new THREE.PlaneGeometry(4.5, 3.05), new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: .1, roughness: .1, transparent: true, opacity: .05, clearcoat: 1, clearcoatRoughness: .05, reflectivity: .7, depthWrite: false }));
+    cover.position.z = .32;
+    // lanyard clip + strap rising out of frame
+    const clip = new THREE.Mesh(roundedGeometry(.52, .22, .14, .06), material.softSilver); clip.position.set(0, 1.74, .05); clip.castShadow = true;
+    const strap = new THREE.Mesh(new THREE.PlaneGeometry(.46, 2.4), new THREE.MeshStandardMaterial({ color: '#b00000', roughness: .72, side: THREE.DoubleSide })); strap.position.set(0, 2.95, -.05);
+    group.add(strap, clip, rim, body, header, face, cover);
+    return group;
   }
 
   async function makePhoto(photo) {
@@ -368,10 +393,11 @@
     camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, .1, 90); camera.position.set(0, .2, 11);
     scene.environment = studioEnvironment();
     material = {
-      red: new THREE.MeshPhysicalMaterial({ color: '#e40000', metalness: .12, roughness: .26, clearcoat: .6, clearcoatRoughness: .17, envMapIntensity: .45 }),
+      red: new THREE.MeshPhysicalMaterial({ color: '#e60000', metalness: .15, roughness: .19, clearcoat: 1, clearcoatRoughness: .13, envMapIntensity: .85 }),
       redEdge: new THREE.MeshPhysicalMaterial({ color: '#b70000', metalness: .35, roughness: .24, clearcoat: 1 }),
       porcelain: new THREE.MeshPhysicalMaterial({ color: '#fff', roughness: .23, metalness: .08, clearcoat: 1 }),
       white: new THREE.MeshStandardMaterial({ color: '#fff', roughness: .65 }),
+      cardWhite: new THREE.MeshPhysicalMaterial({ color: '#fafafa', metalness: .04, roughness: .34, clearcoat: .85, clearcoatRoughness: .17, envMapIntensity: .55 }),
       silver: new THREE.MeshPhysicalMaterial({ color: '#d9d9d9', metalness: .65, roughness: .26, clearcoat: .5 }),
       softSilver: new THREE.MeshStandardMaterial({ color: '#a8a8a8', metalness: .3, roughness: .4 }),
       charcoal: new THREE.MeshStandardMaterial({ color: '#151515', roughness: .4, metalness: .15 })
@@ -379,7 +405,9 @@
     scene.add(new THREE.HemisphereLight('#ffffff', '#c4c4c4', 2.0));
     const key = new THREE.DirectionalLight('#ffffff', 3.9); key.position.set(-4, 8, 7); key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024); key.shadow.camera.left = -12; key.shadow.camera.right = 12; key.shadow.camera.top = 8; key.shadow.camera.bottom = -8; key.shadow.bias = -.001; key.shadow.normalBias = .025; key.shadow.radius = 4;
-    const fill = new THREE.DirectionalLight('#ffffff', 1.7); fill.position.set(6, 3, -3); scene.add(key, fill);
+    const fill = new THREE.DirectionalLight('#ffffff', 1.7); fill.position.set(6, 3, -3);
+    const rim = new THREE.DirectionalLight('#ffffff', 2.5); rim.position.set(-2, 4, -9);
+    scene.add(key, fill, rim);
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), new THREE.ShadowMaterial({ opacity: .13 })); floor.rotation.x = -Math.PI / 2; floor.position.y = -3.2; floor.receiveShadow = true; scene.add(floor);
     const hero = await makeHero();
     const portal = makePortal();
@@ -441,27 +469,38 @@
 
   function channelEcosystem(p, time) {
     const mobile = state.mobile;
-    const entry = state.reduced ? 1 : smooth(-.04, .16, p);
-    const exit = smooth(.86, 1.10, p);
-    const orbitMotion = state.reduced ? .32 : p;
-    const base = mobile ? [[-.235, .065, .0], [.225, .11, -.7], [-.23, -.18, -.4], [.235, -.14, .4]] : [[-.31, -.12, .3], [.00, .025, -.55], [.29, .05, -.4], [.22, -.15, .5]];
-    camera.position.set(Math.sin(orbitMotion * 2.5) * (mobile ? .07 : .35), .28, 11 - Math.sin(orbitMotion * Math.PI) * .25); camera.lookAt(0, 0, 0);
+    const exit = smooth(.9, 1.06, p);
+    const spin = state.reduced ? .1 : clamp((p - .26) / (.92 - .26));
+    const ringRot = -spin * Math.PI * 2;
+    const R = mobile ? 2.1 : 3.05;
+    const cx = mobile ? 0 : viewWidth * .145;
+    const cy = mobile ? .3 : -.12;
+    const cz = -.35;
+    camera.position.set(state.reduced ? 0 : Math.sin(time * .16) * .12, .26, 11);
+    camera.lookAt(cx * .35, 0, 0);
     objects.channels.forEach((channel, i) => {
-      channel.visible = p > -.12 && p < 1.15;
+      channel.visible = p > -.12 && p < 1.14;
       const hover = channel.userData.hoverCurrent = mix(channel.userData.hoverCurrent, channel.userData.hover, .08);
-      const angle = orbitMotion * 2.2 + i * 1.8;
-      const depth = base[i][2] + (state.reduced ? 0 : Math.sin(angle) * .64);
-      const scale = mobile ? Math.min(.52, viewWidth * .16) : [.76, .93, .82, .72][i];
-      const startX = [-5, 3, 5, -2][i] * (1 - entry);
-      const x = base[i][0] * viewWidth + Math.sin(angle) * (mobile ? .035 : .15) + startX;
-      const y = base[i][1] * viewHeight + (state.reduced ? 0 : Math.sin(time * .38 + i) * .035) + (i % 2 ? 1 : -1) * (1 - entry) * 2 + exit * 3;
-      setPose(channel, x, y, depth - (1 - entry) * (9 + i * 2) - exit * (10 + i), .03 + Math.cos(angle) * .055, (state.reduced ? 0 : Math.sin(angle) * .20) + (1 - entry) * (i % 2 ? -1.4 : 1.1), Math.sin(angle) * (mobile ? .028 : .055), scale * (1 + hover * .06));
-      channel.updateMatrixWorld(true); pointLabel(document.getElementById('channel-' + i), channel, -1.46);
+      const theta = i * (Math.PI / 2) + ringRot;
+      const front = Math.cos(theta), frontN = (front + 1) / 2;
+      const rIn = state.reduced ? 1 : smooth(i * .05, .13 + i * .05, p);
+      const x = cx + Math.sin(theta) * R;
+      const z = cz + front * R;
+      const y = cy + (state.reduced ? 0 : Math.sin(time * .4 + i) * .03) + (1 - rIn) * 2.6;
+      const scaleBase = mobile ? .72 : .96;
+      const scale = scaleBase * (.6 + .55 * frontN) * (1 + hover * .05) * rIn;
+      channel.rotation.set(0, theta, state.reduced ? 0 : Math.sin(time * .3 + i) * .012);
+      channel.position.set(x, y - exit * 1.4, z - exit * 11);
+      channel.scale.setScalar(Math.max(.0001, scale));
+      channel.updateMatrixWorld(true);
+      const el = document.getElementById('channel-' + i);
+      if (frontN > .58 && rIn > .55 && exit < .2) { el.style.opacity = ''; el.style.pointerEvents = 'auto'; pointLabel(el, channel, -1.42); }
+      else { el.style.opacity = '0'; el.style.pointerEvents = 'none'; }
     });
-    objects.orbit.visible = !mobile && p > -.05 && p < 1.1;
-    objects.orbit.position.set(viewWidth * .03, -2.59, -exit * 7); objects.orbit.scale.set(1.15, .66, 1);
-    objects.travelingPlay.visible = p > -.04 && p < 1.08;
-    setPose(objects.travelingPlay, mobile ? 0 : -viewWidth * .10, mobile ? -.45 : -2.46, -.5 - exit * 8, .14, -.3 + p * .6, -.06, mobile ? .105 : .18);
+    objects.orbit.visible = !mobile && exit < .95;
+    objects.orbit.position.set(cx, cy - 2.35, cz - exit * 7); objects.orbit.scale.set(R / 3.4 * 1.15, .62, R / 3.4 * 1.15);
+    objects.travelingPlay.visible = p > -.04 && p < 1.06;
+    setPose(objects.travelingPlay, mobile ? 0 : -viewWidth * .40, mobile ? -2.4 : -1.7, -1.6 - exit * 8, .1, -.3 + spin * .5, -.05, mobile ? .09 : .14);
   }
 
   function credentialAndPhotos(p, time) {
@@ -525,9 +564,9 @@
       credentialAndPhotos(p, time);
       if (p > .95) contactScene((p - 1) * 1.5, time);
     } else contactScene(p, time);
-    if (!state.reduced && !state.mobile) {
-      camera.position.x += state.pointerX * .038;
-      camera.position.y -= state.pointerY * .025;
+    if (!state.reduced) {
+      camera.position.x += Math.sin(time * .3) * .03 + (state.mobile ? 0 : state.pointerX * .038);
+      camera.position.y += Math.cos(time * .23) * .022 - (state.mobile ? 0 : state.pointerY * .025);
     }
     camera.updateMatrixWorld();
     renderer.render(scene, camera);
@@ -572,8 +611,7 @@
       await document.fonts.ready;
       await createWorld();
       state.ready = true; root.classList.add('ready'); root.classList.remove('loading');
-      if (gsap && !state.reduced) gsap.to(state, { intro: 1, duration: 2.7, delay: .2, ease: 'power2.inOut' });
-      else state.intro = 1;
+      state.intro = 1;
     } catch (error) {
       console.warn('Using accessible static portfolio presentation:', error.message);
       activateFallback();
