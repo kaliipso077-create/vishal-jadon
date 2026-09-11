@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-11",
+  "scope": "Post-iteration-2 headline fix and direct static-file verification",
+  "root_cause": "GSAP default lag smoothing made the animation clock advance much slower than wall time under software-rendered low frame rates. The title therefore remained partially masked after long waits.",
+  "fix": "Disabled GSAP ticker lag smoothing, explicitly cleared title transforms on completion and when reduced motion is enabled.",
+  "checks": {
+    "headline_1920x800": "PASS: all three line spans within wrapper bounds, computed transform none",
+    "headline_1440x900": "PASS: real 1440x900 iframe viewport; all three spans within wrappers, transform none",
+    "direct_file_entry": "PASS: file:///app/index.html loads html.lenis.ready, actual portfolio-canvas, not no-webgl",
+    "prior_rendering_fixes": "PASS in iteration_2: channel faces, authentic ID/photos, laptop screen/keyboard, red material",
+    "prior_responsive_interactions": "PASS in iteration_2: 320,390,768,1024,1440,1920; navigation, menus, dialogs, photo controls, reduced motion, exact contact links",
+    "mocked_integrations": false
+  },
+  "remaining_known_functional_issues": [],
+  "known_non_error_notice": "Pinned classic Three.js build emits upstream deprecation warning, intentionally retained for direct local-file support.",
+  "user_visual_acceptance": "Pending"
+}

@@ -1,0 +1,132 @@
+{
+  "project_title": "Vishal Jadon — YouTube Growth Manager Portfolio Rebuild",
+  "architectural_type": "3D Cinematic Scroll Experience (Static HTML/CSS/Vanilla JS)",
+  "color_palette": {
+    "brand_primary_red": "#FF0000",
+    "brand_deep_red": "#CC0000",
+    "brand_light_red": "#FF2A2A",
+    "dominant_white": "#FFFFFF",
+    "off_white_surface": "#F8F9FA",
+    "neutral_light_gray": "#EFEFEF",
+    "supporting_charcoal": "#0A0A0A",
+    "supporting_dark_slate": "#121212",
+    "text_primary": "#0A0A0A",
+    "text_on_dark": "#FFFFFF",
+    "text_muted": "#555555",
+    "accent_gold": "#FFD700",
+    "color_rules": "Dominant theme is YouTube Red + Crisp White. Charcoal and obsidian black are used ONLY for cinematic depth, shadows, and contrast overlays. Prohibited: solid black full-page backgrounds, purple, blue, neon green gradients."
+  },
+  "typography": {
+    "heading_font": "Syne, sans-serif",
+    "body_font": "Plus Jakarta Sans, sans-serif",
+    "mono_font": "Space Mono, monospace",
+    "google_fonts_embed": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap",
+    "hierarchy": {
+      "hero_title": "text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight uppercase leading-none",
+      "section_heading": "text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight uppercase",
+      "subsection_heading": "text-xl sm:text-2xl font-bold tracking-tight",
+      "body": "text-base sm:text-lg leading-relaxed font-normal",
+      "mono_label": "text-xs sm:text-sm font-mono uppercase tracking-widest text-red-600"
+    }
+  },
+  "visual_enhancers": {
+    "play_button_3d": "Realistic physical 3D YouTube Play Button with metallic bevels, red mirror finish, specular highlights, and contact shadows.",
+    "out_of_screen_effect": "Breaking-the-frame depth technique where the 3D Play Button crosses canvas clipping planes, moving into viewer space with camera perspective, dynamic field of view, and soft directional shadows.",
+    "glassmorphism": "backdrop-blur-xl bg-white/80 border border-white/40 shadow-xl for floating nav and interactive overlay cards.",
+    "lighting_and_shadows": "Direct key light (pure white), fill light (subtle red bounce), soft directional ambient light to highlight bevels and metallic surfaces."
+  },
+  "media_and_assets": {
+    "real_vishal_seated": "/site/assets/images/hero-vishal.jpg",
+    "real_vishal_source_url": "https://customer-assets-lqy194kg.emergentagent.net/job_creator-ecosystem-23/artifacts/ho9py3cn_image.png",
+    "real_id_card": "/site/assets/images/id-card.jpg",
+    "real_event_photos": [
+      "/site/assets/images/work-josh-close.jpg",
+      "/site/assets/images/work-josh-wide.jpg",
+      "/site/assets/images/work-meeting.jpg"
+    ],
+    "technique_reference_fish": "https://customer-assets-lqy194kg.emergentagent.net/job_creator-ecosystem-23/artifacts/a8jbtykx_image.png"
+  },
+  "real_channels": [
+    {
+      "name": "Acharya Prashant",
+      "url": "https://youtube.com/@shriprashant",
+      "role": "Growth Strategy & Audience Scale"
+    },
+    {
+      "name": "Josh Talks Hindi",
+      "url": "https://youtube.com/@joshtalkshindi",
+      "role": "Content Optimization & Audience Retention"
+    },
+    {
+      "name": "Zee Switch",
+      "url": "https://www.youtube.com/@ZeeSwitch",
+      "role": "Monetization & Channel Architecture"
+    },
+    {
+      "name": "Unknown Facts Hindi",
+      "url": "https://www.youtube.com/@UNKNOWNFACTSHINDI/videos",
+      "role": "Viral Content Positioning"
+    }
+  ],
+  "contact_info": {
+    "instagram_handle": "@vishjd",
+    "instagram_url": "https://www.instagram.com/vishjd/",
+    "email": "Infovishaljadon@gmail.com"
+  },
+  "storyboard_and_scenes": [
+    {
+      "scene_index": "01",
+      "title": "Opening — 3D Play Button Frame Break",
+      "description": "Website opens with NO Vishal portrait visible. A giant 3D physical YouTube Play Button floats in 3D space, moving toward the viewer and breaking the screen boundary."
+    },
+    {
+      "scene_index": "02",
+      "title": "Continuous Scroll Transition — Reveal Hero",
+      "description": "On scroll, camera orbits and enters the 3D space around the Play Button, revealing real Vishal sitting physically ON/AROUND the Play Button along with main heading CREATOR × STRATEGY × MONETIZE and YOUTUBE GROWTH MANAGER."
+    },
+    {
+      "scene_index": "03",
+      "title": "Floating Growth 3D Visuals",
+      "description": "3D data indicators (+1.2M views, subscriber counters, subtle metric particles) float around Vishal in 3D space as scroll progresses."
+    },
+    {
+      "scene_index": "04",
+      "title": "3D Work Ecosystem (Worked With)",
+      "description": "Interactive 3D ecosystem featuring real channels (Acharya Prashant, Josh Talks Hindi, Zee Switch, Unknown Facts Hindi) floating at distinct depths and angles."
+    },
+    {
+      "scene_index": "05",
+      "title": "Real Press Credential / ID Card Journey",
+      "description": "Real ID card travels from deep background z-space, revolves 360 degrees, approaches foreground for clear hold/readability, and exits into background."
+    },
+    {
+      "scene_index": "06",
+      "title": "Real Event & Proof Gallery",
+      "description": "Authentic work and conference photos emerge after ID exit, displaying real evidence and events."
+    },
+    {
+      "scene_index": "07",
+      "title": "Contact Workspace & CTA",
+      "description": "3D workspace backdrop with ambient red lighting, displaying Instagram (@vishjd) and Email (Infovishaljadon@gmail.com) CTAs."
+    }
+  ],
+  "technical_stack": {
+    "architecture": "Pure Static Web (index.html, style.css, script.js)",
+    "libraries_cdn": [
+      "Three.js (r170)",
+      "GSAP (3.12.5) + ScrollTrigger",
+      "Lenis Smooth Scroll (1.1)"
+    ],
+    "no_react_build_required": true
+  },
+  "instructions_to_main_agent": {
+    "mandatory_data_testid": "Every interactive element (buttons, links, nav, inputs, channel cards, contact links) and key text/stats MUST contain a unique data-testid attribute in kebab-case format.",
+    "no_placeholders": "Use ONLY provided authentic details, channels, images, and contact links. Do not invent fake stats or lorem ipsum.",
+    "opening_rule": "Ensure no portrait of Vishal is visible prior to the user interacting/scrolling through the 3D opening sequence.",
+    "responsiveness": "Ensure smooth 60fps WebGL canvas scaling and responsive DOM text safe zones across desktop, tablet, and mobile devices."
+  },
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": {
+    "anti_ai_slop": "Avoid standard dark templates, centered generic layouts, and basic card grids. Craft high-end cinematic motion with explicit depth.",
+    "testing_readiness": "Maintain clean HTML structure with data-testid on every clickable or data-bearing element."
+  }
+}

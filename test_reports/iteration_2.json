@@ -1,0 +1,71 @@
+{
+  "summary": "Critical-fix frontend retest completed across 1920x800, 1440x900, 1024x768, 768x1024, 390x844, and 320x700. Previously blank Work/Proof/Gallery physical media now render with authentic images and red/white palette is largely correct; one remaining readability bug found in desktop hero title at required settled checkpoint.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Hero headline at settled checkpoint",
+        "issue": "At home 0.42 on desktop (1920x800 and 1440x900), hero title lines are vertically clipped (not fully readable) despite waiting >2s after transition, violating settled-readability requirement.",
+        "selector": "[data-testid='hero-title']",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Desktop hero (1920x800 / 1440x900)",
+        "issues": [
+          "Typography mask/layout causes partial clipping of hero words in settled frame."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/root/.emergent/automation_output/20260911_122223/console_20260911_122223.log",
+    "/root/.emergent/automation_output/20260911_122551/console_20260911_122551.log",
+    "/root/.emergent/automation_output/20260911_122830/console_20260911_122830.log",
+    "/root/.emergent/automation_output/20260911_123230/console_20260911_123230.log"
+  ],
+  "visual_proof_screenshots": [
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_opening.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_hero_042.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_work_040.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_proofs_027.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_gallery_057.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_gallery_073.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_gallery_089.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1920x800_contact_024.jpeg",
+    "/app/test_reports/artifacts_iteration_2a/desktop_1440x900_hero_042.jpeg",
+    "/app/test_reports/artifacts_iteration_2b/laptop_1024x768_work_040.jpeg",
+    "/app/test_reports/artifacts_iteration_2b/tablet_768x1024_proofs_027.jpeg",
+    "/app/test_reports/artifacts_iteration_2c/mobile_390x844_work_040.jpeg",
+    "/app/test_reports/artifacts_iteration_2c/mobile_320x700_work_040.jpeg",
+    "/app/test_reports/artifacts_iteration_2c/mobile_320x700_proofs_027.jpeg",
+    "/app/test_reports/artifacts_iteration_2c/mobile_320x700_gallery_073.jpeg",
+    "/app/test_reports/artifacts_iteration_2c/mobile_320x700_contact_024.jpeg",
+    "/app/test_reports/artifacts_iteration_2d/reduced_motion_check.jpeg"
+  ],
+  "action_items": [
+    "Fix hero title clipping at settled desktop checkpoints (home 0.42) so all hero lines are fully readable at 1920x800 and 1440x900.",
+    "Re-run only hero settled screenshots after fix to confirm readability without mid-animation masking artifacts."
+  ],
+  "critical_code_review_comments": [
+    "No new critical rendering-code defect found for previously blocked media planes; channel faces, credential face, and gallery photo planes are now visible on physical surfaces.",
+    "No /api calls, no 404 resources, and no server-side errors observed during regression runs."
+  ],
+  "updated_files": [
+    "/app/test_reports/iteration_2.json"
+  ],
+  "success_rate": {
+    "backend": "N/A (frontend-only scope)",
+    "frontend": "95%"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Critical visual blocker from iteration_1 is resolved: in-scene channel/ID/gallery media are now visible on all tested viewports and laptop screen/keyboard are visible. Remaining issue is hero text clipping at settled desktop checkpoints. Controls smoke passed (anchors, enter, explore, mobile menu escape/tab smoke, ID modal escape, photo prev/next/modal, motion toggle, OS reduced-motion preference reaction, exact contact links).",
+  "rca of the issue": "Desktop hero clipping appears to be a typography/animation layout issue: hero line wrappers (`.line` overflow hidden with large desktop font sizes) still clip text at 1920x800/1440x900 settled frame, likely due final y-position/line box composition rather than WebGL scene failure."
+}

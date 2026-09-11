@@ -1,1 +1,1 @@
-/app/site/script.js
+/app/script.js
